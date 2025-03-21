@@ -27,41 +27,33 @@ const Appointments = () => {
     }
 
     const getAvailableSlot = async () => {
-        let allSlots = []; // Collect all slots in this array
+        let allSlots = [];
         let today = new Date();
-        today.setHours(0, 0, 0, 0); // Set today's date to start of the day to avoid the time mismatch
+        today.setHours(0, 0, 0, 0);
 
-        // Loop through the next 7 days
         for (let i = 0; i < 7; i++) {
-            let currentDate = new Date(today); // Start with a fresh date object for each iteration
-            currentDate.setDate(today.getDate() + i); // Increment day by i
+            let currentDate = new Date(today);
+            currentDate.setDate(today.getDate() + i);
 
-            // Now clear the time and make sure the date is correctly set
-            currentDate.setHours(10, 0, 0, 0); // Set the start time for the day to 10:00 AM
+            currentDate.setHours(10, 0, 0, 0);
 
             let endTime = new Date(currentDate);
-            endTime.setHours(21, 0, 0, 0); // Set the end time to 9 PM for the current date
+            endTime.setHours(21, 0, 0, 0);
 
-            let timeSlots = []; // Array to hold the time slots for this day
-
-            // If today is selected (i === 0), check the current time
+            let timeSlots = [];
             if (i === 0) {
-                let currentTime = new Date(); // Get the current time
+                let currentTime = new Date();
                 console.log("Current Time: ", currentTime);
 
-                // Check if current time is after 8:30 PM today
                 if (currentTime.getHours() > 20 || (currentTime.getHours() === 20 && currentTime.getMinutes() > 30)) {
-                    // If it's after 8:30 PM, set the end time to the current time (so no slots after that)
                     endTime = new Date(currentTime);
                     console.log("Setting endTime to current time because it's after 8:30 PM");
                 } else {
-                    // Otherwise, limit the end time to 8:30 PM for today
-                    endTime.setHours(20, 30, 0, 0); // Set end time to 8:30 PM for today
+                    endTime.setHours(20, 30, 0, 0);
                     console.log("Setting endTime to 8:30 PM for today");
                 }
             }
 
-            // Generate available time slots for the day (up to endTime)
             while (currentDate < endTime) {
                 let formattedTime = currentDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
@@ -77,22 +69,21 @@ const Appointments = () => {
                 if (isSlotAvailable) {
                     if (currentDate <= endTime) {
                         timeSlots.push({
-                            datetime: new Date(currentDate), // Save the current date for the slot
+                            datetime: new Date(currentDate),
                             time: formattedTime,
                         });
                     }
                 }
-                // Only push slots before or equal to the end time
 
-                currentDate.setMinutes(currentDate.getMinutes() + 30); // Increment time by 30 minutes
+                currentDate.setMinutes(currentDate.getMinutes() + 30);
             }
 
-            console.log("Generated Slots for Day:", timeSlots); // Log time slots for each day
-            allSlots.push(timeSlots); // Add this day's slots to the allSlots array
+            console.log("Generated Slots for Day:", timeSlots);
+            allSlots.push(timeSlots);
         }
 
-        console.log("All Slots:", allSlots); // Log all slots once created
-        setDocSlots(allSlots); // Finally, update the state with the slots
+        console.log("All Slots:", allSlots);
+        setDocSlots(allSlots);
     };
 
     const bookAppointment = async () => {
@@ -168,7 +159,6 @@ const Appointments = () => {
                 </div>
             </div>
 
-            {/** ---- Booking Slots ---- */}
             <div className='sm:ml-72 sm:pl-4 mt-4 font-medium text-gray-700'>
                 <p>Booking Slots</p>
                 <div className='flex gap-3 items-center w-full overflow-x-scroll mt-4'>
