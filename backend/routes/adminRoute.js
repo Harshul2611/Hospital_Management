@@ -1,5 +1,6 @@
 const express = require("express");
 const upload = require("../middlewares/multer");
+
 const {
   addDoctor,
   loginAdmin,
@@ -8,6 +9,7 @@ const {
   appointmentCancel,
   adminDashboard,
 } = require("../controllers/adminController");
+
 const authAdmin = require("../middlewares/authAdmin");
 const { changeAvailability } = require("../controllers/doctorController");
 
